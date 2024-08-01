@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Company } from '../company.service';
 
@@ -7,10 +7,16 @@ import { Company } from '../company.service';
   templateUrl: './company-dialog-component.component.html',
   styleUrls: ['./company-dialog-component.component.css']
 })
-export class CompanyDialogComponentComponent {
+export class CompanyDialogComponentComponent implements OnInit {
+  role: string = "";
+
   constructor(
     public dialogRef: MatDialogRef<CompanyDialogComponentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Company) {}
+
+  ngOnInit(): void {
+    this.role = localStorage.getItem('role') || '';
+  }
 
   onCancel(): void {
     this.dialogRef.close();

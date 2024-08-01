@@ -10,11 +10,18 @@ import { CompanyDialogComponentComponent } from './company-dialog-component/comp
 })
 export class CompaniesComponent {
   companies: Company[] = [];
-  displayedColumns: string[] = ['companyName', 'companyAddress', 'actions'];
+  displayedColumns: string[] = [];
+  role: string = "";
 
   constructor(private companyService: CompanyService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.role = localStorage.getItem('role') || '';
+    if(this.role === 'Admin'){
+      this.displayedColumns = ['companyName', 'companyAddress', 'actions'];
+    }else if(this.role === 'RoleA'){
+      this.displayedColumns = ['companyName', 'companyAddress', 'email', 'actions'];
+    }
     this.loadCompanies();
   }
 

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 export interface LoginResponse {
   token: string;
   expiration: string;
-  role: string; // Add role property here
+  role: string;
 }
 
 @Injectable({

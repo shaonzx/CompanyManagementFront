@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { LoginResponse } from '../auth.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import { LoginResponse } from '../auth.service';
 export class LoginComponent {
   username: string = '';
   password: string = '';
-  errorMessage: string = ''; // Add this property
+  errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -23,12 +24,14 @@ export class LoginComponent {
     this.authService.login(this.username, this.password).subscribe({
       next: (response: LoginResponse) => {
         localStorage.setItem('token', response.token);
-        localStorage.setItem('role', response.role); // Assuming the role is included in the response
+        const decodedToken: any = jwtDecode(response.token);
+        const role = decodedToken.role;
+        localStorage.setItem('role', role);
         this.router.navigate(['/dashboard']);
       },
       error: (error) => {
         console.error('Login failed', error);
-        this.errorMessage = error.error.message || 'Login failed. Please try again.'; // Set the error message
+        this.errorMessage = error.error.message || 'Login failed. Please try again.';
       }
     });
   }
